@@ -1,16 +1,18 @@
 #!/usr/bin/python3
-"""Defines an append_write() function."""
+"""
+function that inserts a line of text to a file, after each line containing a specific string
+"""
 
 
-def append_write(filename="", text=""):
-    """Appends a string to a file.
-
-    Args:
-        filename: The path and name of the file.
-        text: The string to append.
-    Returns:
-        The number of characters appended.
-    """
-    with open(filename, "a", encoding="utf-8") as f:
-        return f.write(text)
-    return 0
+def append_after(filename="", search_string="", new_string=""):
+    '''module Search and update
+    '''
+    with open(filename, 'r+') as f:
+        lines = f.readlines()
+        i = 0
+        for line in lines:
+            if line.find(search_string) is not -1:
+                lines.insert(i + 1, new_string)
+            i += 1
+        f.seek(0)
+        f.write("".join(lines))
