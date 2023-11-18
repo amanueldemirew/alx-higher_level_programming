@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # through the same connection to the database.
     cur = db.cursor()
 
-    cur.execute("SELECT * FROM states WHERE name = '{}'".format(argv[4]))
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY '{}'".format(argv[4]))
 
     rows = cur.fetchall()
     for i in rows:
