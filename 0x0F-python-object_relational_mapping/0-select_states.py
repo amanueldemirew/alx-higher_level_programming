@@ -16,7 +16,7 @@ def main():
     }
     conn = MySQLdb.connect(**options)
     cur = conn.cursor()
-    cur.execute("SELECT * FROM states")
+    cur.execute("SELECT * FROM states ORDER BY id")
     query_rows = cur.fetchall()
     for row in query_rows:
         print(row)
