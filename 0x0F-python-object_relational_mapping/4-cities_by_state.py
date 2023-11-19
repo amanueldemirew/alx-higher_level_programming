@@ -1,26 +1,24 @@
 #!/usr/bin/python3
-"""Displays all cities."""
+"""
+Script that lists all cities from the database hbtn_0e_4_usa
+"""
 import MySQLdb
-import sys
+from sys import argv
 
+# The code should not be executed when imported
+if __name__ == '__main__':
+    # make a connection to the database
+    db = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
+                         passwd=argv[2], db=argv[3])
 
-def main():
-    """Connects to the database and displays all cities."""
-    options = {
-        "host": "localhost",
-        "port": 3306,
-        "user": sys.argv[1],
-        "passwd": sys.argv[2],
-        "db": sys.argv[3],
-        "charset": "utf8"
-    }
-    query = "SELECT cities.id, cities.name, states.name FROM cities, states "
-    query += "WHERE cities.state_id = states.id ORDER BY id"
-    conn = MySQLdb.connect(**options)
-    cur = conn.cursor()
-    cur.execute(query)
-    query_rows = cur.fetchall()
-    for row in query_rows:
-        print(row)
+    cur = db.cursor()
+    cur.execute("SELECT cities.id, cities.name, states.name FROM cities\
+                INNER JOIN states ON cities.state_id = states.id\
+                ORDER BY cities.id ASC")
+
+    rows = cur.fetchall()
+    for i in rows:
+        print(i)
+    # Clean up process
     cur.close()
-    conn.close()
+    db.close()

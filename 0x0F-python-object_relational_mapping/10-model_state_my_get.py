@@ -1,19 +1,29 @@
 #!/usr/bin/python3
-# Lists State objects by name.
-import sys
+"""
+Script that prints the State object with the name passed as argument
+from the database
+Using module SQLAlchemy
+"""
+
 from model_state import Base, State
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sys import argv
 
-if __name__ == '__main__':
-    url = 'mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
-        sys.argv[1], sys.argv[2], sys.argv[3]
-    )
-    engine = create_engine(url, pool_pre_ping=True)
-    Base.metadata.create_all(engine)
+if __name__ == "__main__":
+    # create an engine
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        argv[1], argv[2], argv[3]), pool_pre_ping=True)
+    # create a configured "Session" class
     Session = sessionmaker(bind=engine)
+    # create a Session
     session = Session()
+    Base.metadata.create_all(engine)
 
-    result = session.query(State).filter_by(name=sys.argv[4]).first()
-    print(result.id if result else "Not found")
+    s_tate = session.query(State).filter(State.name == argv[4]).first()
+
+    if s_tate:
+        print("{}".format(s_tate.id))
+    else:
+        print("Not found")
     session.close()
