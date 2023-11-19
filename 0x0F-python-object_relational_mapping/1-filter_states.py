@@ -1,16 +1,27 @@
 #!/usr/bin/python3
-""" lists states that start whit N """
-
+"""Lists all states starting with 'N'."""
 import MySQLdb
 import sys
 
 
-if __name__ == "__main__":
-    db = MySQLdb.connect(host="localhost", user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3], port=3306)
-    cur = db.cursor()
-    cur.execute("SELECT * FROM  states WHERE name LIKE 'N%' ORDER BY states.id ")
-    rows = cur.fetchall()
-    for row in rows:
+def main():
+    """Connects to the database and lists all states starting with 'N'."""
+    options = {
+        "host": "localhost",
+        "port": 3306,
+        "user": sys.argv[1],
+        "passwd": sys.argv[2],
+        "db": sys.argv[3],
+        "charset": "utf8"
+    }
+    conn = MySQLdb.connect(**options)
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' ORDER BY id")
+    query_rows = cur.fetchall()
+    for row in query_rows:
         print(row)
     cur.close()
-    db.close()
+    conn.close()
+
+if (__name__ == "__main__"):
+    main()

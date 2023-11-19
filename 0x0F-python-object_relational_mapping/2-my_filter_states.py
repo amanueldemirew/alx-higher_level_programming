@@ -1,15 +1,28 @@
 #!/usr/bin/python3
-""" lists states by user input  """
-
+"""Displays states matching the cli argument."""
 import MySQLdb
 import sys
 
-if __name__ == "__main__":
-    db = MySQLdb.connect(host="localhost", user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
-    cur = db.cursor()
-    cur.execute("SELECT * FROM states WHERE name LIKE BINARY '{}'".format(sys.argv[4]))
-    rows = cur.fetchall()
-    for row in rows:
+
+def main():
+    """Connects to the database and selects the matching states."""
+    options = {
+        "host": "localhost",
+        "port": 3306,
+        "user": sys.argv[1],
+        "passwd": sys.argv[2],
+        "db": sys.argv[3],
+        "charset": "utf8"
+    }
+    query = "SELECT * FROM states WHERE BINARY name = '{}' ORDER BY id"
+    conn = MySQLdb.connect(**options)
+    cur = conn.cursor()
+    cur.execute(query.format(sys.argv[4]))
+    query_rows = cur.fetchall()
+    for row in query_rows:
         print(row)
     cur.close()
-    db.close()
+    conn.close()
+
+if (__name__ == "__main__"):
+    main()
