@@ -24,6 +24,3 @@ def main():
     print(", ".join([row[0] for row in query_rows]))
     cur.close()
     conn.close()
-
-if (__name__ == "__main__"):
-    main()
